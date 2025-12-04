@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propel Labs - Real Estate Partner App</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Hide Scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* View Transitions */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+            min-height: 100vh;
+            padding-bottom: 80px; /* Space for bottom nav */
+            background-color: #f9fafb;
+        }
+
+        .view-section.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Specific Full Screen Views (Landing/Login) */
+        .fullscreen-view {
+            padding-bottom: 0;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #111827;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(100%); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up-card {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Accordion transition */
+        .accordion-content {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        .accordion-content.open {
+            max-height: 500px; /* Arbitrary large number */
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="mx-auto max-w-md bg-white shadow-2xl relative min-h-screen overflow-hidden text-gray-800">
+
+    <!-- ========================
+         VIEW: LANDING PAGE
+    ======================== -->
+    <div id="view-landing" class="view-section active fullscreen-view relative">
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2613&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-60">
+        
+        <div class="relative w-full h-full flex flex-col justify-end">
+            <div class="bg-white rounded-t-3xl p-8 pt-12 pb-16 flex flex-col items-center slide-up-card w-full">
+                <h2 class="text-2xl font-bold text-[#1a237e] text-center mb-2">Personalized Solution for</h2>
+                <h2 class="text-2xl font-bold text-[#1a237e] text-center mb-8">Streamlining Customer Relationships</h2>
+                
+                <button onclick="navigateTo('view-login')" class="w-full py-4 bg-[#1a237e] text-white rounded-full font-semibold text-lg flex items-center justify-center gap-2 hover:bg-blue-900 transition-all shadow-lg shadow-blue-900/30">
+                    Get Started <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+                
+                <p class="mt-6 text-sm text-gray-500">
+                    Janapriya Upscale Employee ? <span class="text-[#1a237e] font-bold cursor-pointer" onclick="navigateTo('view-login')">Login</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: LOGIN PAGE
+    ======================== -->
+    <div id="view-login" class="view-section fullscreen-view relative">
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2613&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-60">
+        
+        <div class="relative w-full h-full flex flex-col justify-end">
+            <div class="bg-white rounded-t-3xl p-8 pt-10 pb-12 flex flex-col items-center slide-up-card w-full">
+                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg mb-6 -mt-20 z-10">
+                    <i data-lucide="home" class="w-8 h-8 text-orange-500"></i>
+                </div>
+
+                <h2 class="text-xl font-bold text-[#1a237e] text-center mb-8">Login</h2>
+
+                <div class="w-full space-y-4 mb-8">
+                    <input type="text" placeholder="User Name" class="w-full p-4 rounded-xl border border-gray-300 text-gray-700 text-sm focus:outline-none focus:border-[#1a237e] focus:ring-1 focus:ring-[#1a237e]">
+                    <input type="password" placeholder="Password" class="w-full p-4 rounded-xl border border-gray-300 text-gray-700 text-sm focus:outline-none focus:border-[#1a237e] focus:ring-1 focus:ring-[#1a237e]">
+                </div>
+
+                <button onclick="loginUser()" class="w-full py-4 bg-[#1a237e] text-white rounded-full font-semibold text-lg flex items-center justify-center gap-2 hover:bg-blue-900 transition-all shadow-lg shadow-blue-900/30">
+                    Login <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+
+                <p class="mt-6 text-sm text-gray-500">
+                    Don't have an account ? <button onclick="navigateTo('view-enroll')" class="text-[#1a237e] font-bold">Enroll with Auro</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: ENROLL
+    ======================== -->
+    <div id="view-enroll" class="view-section bg-white">
+        <!-- Header -->
+        <div class="flex items-center gap-3 px-6 py-4 sticky top-0 bg-white z-20 border-b border-gray-100">
+            <button onclick="navigateTo('view-login')" class="p-2 -ml-2 rounded-full hover:bg-gray-100 text-[#1a237e]">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <h1 class="text-xl font-bold text-[#1a237e]">Enroll</h1>
+        </div>
+
+        <div class="flex-1 px-5 pt-6 pb-8 overflow-y-auto space-y-4">
+            <input type="text" placeholder="Company Name" class="w-full p-3.5 rounded-xl border border-gray-400 text-sm text-gray-700">
+            <input type="text" placeholder="Contact Person" class="w-full p-3.5 rounded-xl border border-gray-400 text-sm text-gray-700">
+            <input type="text" placeholder="Mobile No" class="w-full p-3.5 rounded-xl border border-gray-400 text-sm text-gray-700">
+            <input type="email" placeholder="Email Id" class="w-full p-3.5 rounded-xl border border-gray-400 text-sm text-gray-700">
+            
+            <div class="flex rounded-xl border border-gray-400 overflow-hidden bg-white mt-2">
+                <button class="bg-[#1a237e] text-white px-6 py-3.5 text-xs font-medium min-w-[120px]">Choose file</button>
+                <div class="flex-1 flex items-center px-4 text-gray-400 text-xs">Service Tax Doc</div>
+            </div>
+
+            <div class="flex items-center gap-3 mt-4 cursor-pointer">
+                <i data-lucide="square" class="w-5 h-5 text-gray-400"></i>
+                <span class="text-[#1a237e] font-bold text-sm">I accept the terms and conditions</span>
+            </div>
+        </div>
+
+        <div class="p-6 bg-white border-t border-gray-100 mt-auto">
+            <button onclick="alert('Enrolled Successfully!'); navigateTo('view-login')" class="w-full py-4 rounded-full bg-[#1a237e] text-white font-semibold text-lg shadow-lg">Enroll</button>
+        </div>
+    </div>
+
+    <!-- ========================
+         APP HEADER (Shared for App Views)
+    ======================== -->
+    <div id="app-header" class="hidden flex items-center justify-between px-6 py-4 bg-white sticky top-0 z-30 border-b border-gray-50">
+        <div class="flex items-center gap-3">
+            <div id="header-back-btn" class="hidden">
+                 <button onclick="goBack()" class="p-2 -ml-2 rounded-full hover:bg-gray-100 text-[#1a237e]">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div id="header-brand" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-orange-400 to-blue-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="home" class="text-white w-5 h-5"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-orange-500 font-bold text-sm leading-none">Propel Labs</span>
+                    <span class="text-[10px] text-gray-400 leading-none">Innovations for real estate</span>
+                </div>
+            </div>
+            <h1 id="header-title" class="hidden text-xl font-bold text-[#1a237e]"></h1>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <div id="header-actions-default" class="flex items-center gap-3">
+                <i data-lucide="bell" class="w-6 h-6 text-gray-600"></i>
+                <button onclick="navigateTo('view-profile-menu')" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-[#1a237e] font-semibold text-sm hover:bg-gray-50 bg-white">
+                    AR
+                </button>
+            </div>
+            <div id="header-actions-custom"></div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: DASHBOARD
+    ======================== -->
+    <div id="view-dashboard" class="view-section">
+        <div class="px-6 py-4">
+            <h2 class="text-xl font-bold text-[#1a237e]">Partner Dashboard</h2>
+            <h3 class="text-sm font-semibold text-[#1a237e] mb-4">Sales & Activity Metrics</h3>
+            
+            <!-- Metrics Row 1 -->
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative">
+                   <div class="absolute top-4 right-4 bg-[#1a237e] rounded p-1"><i data-lucide="bar-chart-2" class="w-3 h-3 text-white"></i></div>
+                   <p class="text-xs text-gray-500 font-semibold mb-1">Total Leads</p>
+                   <h4 class="text-2xl font-bold text-gray-900">1,489</h4>
+                   <p class="text-[10px] text-green-500 font-bold mt-1">+12.5% <span class="text-gray-400 font-normal">vs last month</span></p>
+                </div>
+                <div class="flex-1 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative">
+                   <div class="absolute top-4 right-4 bg-[#1a237e] rounded p-1"><i data-lucide="bar-chart-2" class="w-3 h-3 text-white"></i></div>
+                   <p class="text-xs text-gray-500 font-semibold mb-1">Total SV Done</p>
+                   <h4 class="text-2xl font-bold text-gray-900">847</h4>
+                   <p class="text-[10px] text-green-500 font-bold mt-1">+8.2% <span class="text-gray-400 font-normal">vs last month</span></p>
+                </div>
+            </div>
+
+            <h3 class="text-sm font-semibold text-[#1a237e] mb-4">Incentive & Financial Metrics</h3>
+            
+            <!-- Financial Cards -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-4 text-white relative shadow-lg shadow-green-200">
+                   <div class="absolute top-3 right-3 bg-white/20 p-1 rounded"><span class="text-xs font-bold">$</span></div>
+                   <p class="text-[10px] font-medium opacity-90 mb-1">Incentive Due</p>
+                   <h4 class="text-xl font-bold mb-1">₹20 Cr</h4>
+                   <p class="text-[9px] opacity-80">Ready for payout</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-xl p-4 text-white relative shadow-lg shadow-blue-200">
+                   <div class="absolute top-3 right-3 bg-white/20 p-1 rounded"><i data-lucide="file-text" class="w-3 h-3"></i></div>
+                   <p class="text-[10px] font-medium opacity-90 mb-1">Incentive Raised</p>
+                   <h4 class="text-xl font-bold mb-1">₹85 Cr</h4>
+                   <p class="text-[9px] opacity-80">Total earned this year</p>
+                </div>
+            </div>
+
+            <!-- Chart Simulation -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-xs text-gray-500">Project wise enquiry</p>
+                    <p class="text-xs text-gray-400">Weekly ▼</p>
+                </div>
+                <div class="h-32 flex items-end justify-between gap-2 px-2">
+                    <div class="w-full bg-[#1a237e] rounded-t-sm" style="height: 40%"></div>
+                    <div class="w-full bg-[#1a237e] rounded-t-sm" style="height: 35%"></div>
+                    <div class="w-full bg-[#1a237e] rounded-t-sm" style="height: 40%"></div>
+                    <div class="w-full bg-[#1a237e] rounded-t-sm" style="height: 25%"></div>
+                    <div class="w-full bg-[#1a237e] rounded-t-sm" style="height: 50%"></div>
+                    <div class="w-full bg-[#1a237e] rounded-t-sm" style="height: 45%"></div>
+                    <div class="w-full bg-[#1a237e] rounded-t-sm" style="height: 50%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: LEADS
+    ======================== -->
+    <div id="view-leads" class="view-section">
+        <div class="px-6 pt-2 pb-4 flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-[#1a237e]">My SVs & Leads</h2>
+            <button onclick="navigateTo('view-submit-lead')" class="w-10 h-10 rounded-full bg-[#1a237e] flex items-center justify-center text-white shadow-lg hover:bg-blue-900 transition-colors">
+                <i data-lucide="plus" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div class="px-6 mb-6">
+            <div class="relative">
+                <i data-lucide="search" class="absolute left-3 top-3.5 w-5 h-5 text-gray-400"></i>
+                <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:border-[#1a237e] shadow-sm text-sm bg-white">
+            </div>
+        </div>
+
+        <div class="px-4 space-y-3">
+            <!-- Lead Card 1 -->
+            <div class="bg-[#1a237e] text-white rounded-2xl p-4 flex justify-between items-start shadow-md">
+                <div class="flex gap-4">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#1a237e]">
+                       <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">Test User 1</h3>
+                        <p class="text-xs text-blue-200 mt-1">Date : 22 / Mar / 2025</p>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                    <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-gray-500/50 uppercase tracking-wide">SITE VISIT - SCHEDULED</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 mt-1 text-blue-300"></i>
+                </div>
+            </div>
+             <!-- Lead Card 2 -->
+             <div class="bg-[#1a237e] text-white rounded-2xl p-4 flex justify-between items-start shadow-md">
+                <div class="flex gap-4">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#1a237e]">
+                       <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">Test User 2</h3>
+                        <p class="text-xs text-blue-200 mt-1">Date : 24 / Mar / 2025</p>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                    <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-gray-500/50 uppercase tracking-wide">PENDING</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 mt-1 text-blue-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: SUBMIT LEAD (FORM)
+    ======================== -->
+    <div id="view-submit-lead" class="view-section bg-white">
+        <div class="flex-1 px-6 pt-4 pb-24 overflow-y-auto">
+            <!-- Salutation -->
+            <div class="mb-4">
+                <label class="block text-xs text-gray-500 mb-1 ml-1">Salutation</label>
+                <div class="relative">
+                    <select class="w-full p-3.5 pr-10 rounded-xl border border-gray-300 text-sm appearance-none bg-white text-gray-700 focus:outline-none focus:border-[#1a237e]">
+                        <option>-----None-----</option>
+                        <option>Mr.</option>
+                        <option>Mrs.</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-3 top-4 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                </div>
+            </div>
+            
+            <div class="space-y-4 mb-4">
+                <input type="text" placeholder="First Name" class="w-full p-3.5 rounded-xl border border-gray-300 text-gray-700 text-sm">
+                <input type="text" placeholder="Last Name" class="w-full p-3.5 rounded-xl border border-gray-300 text-gray-700 text-sm">
+                <input type="email" placeholder="Email" class="w-full p-3.5 rounded-xl border border-gray-300 text-gray-700 text-sm">
+                <input type="tel" placeholder="Mobile" class="w-full p-3.5 rounded-xl border border-gray-300 text-gray-700 text-sm">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-xs text-gray-500 mb-1 ml-1">Project Interested</label>
+                <div class="relative">
+                    <select class="w-full p-3.5 pr-10 rounded-xl border border-gray-300 text-sm appearance-none bg-white text-gray-700 focus:outline-none focus:border-[#1a237e]">
+                        <option>-----None-----</option>
+                        <option>The Regent</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-3 top-4 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                </div>
+            </div>
+
+            <textarea placeholder="Call Summary/Remarks" class="w-full p-3.5 rounded-xl border border-gray-300 text-gray-700 text-sm min-h-[100px] mb-6"></textarea>
+
+            <div class="flex items-center gap-3 mb-6" onclick="toggleSiteVisit()">
+                <div id="sv-checkbox" class="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center"></div>
+                <span class="text-sm text-[#1a237e] font-bold">Schedule a Site Visit</span>
+            </div>
+
+            <div id="sv-details" class="hidden transition-all duration-300">
+                <h3 class="text-base font-bold text-gray-800 mb-4">Appointment Date</h3>
+                <div class="flex gap-4 mb-4">
+                    <div class="flex-1">
+                        <label class="text-xs text-gray-400 ml-1">Date</label>
+                        <input type="date" class="w-full p-3 rounded-xl border border-gray-300 text-sm bg-white">
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-xs text-gray-400 ml-1">Time</label>
+                        <input type="time" class="w-full p-3 rounded-xl border border-gray-300 text-sm bg-white">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-100 max-w-md mx-auto">
+            <button onclick="alert('Lead Added!'); navigateTo('view-leads')" class="w-full py-4 rounded-full bg-[#1a237e] text-white font-semibold text-lg shadow-lg">Confirm</button>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: PIPELINE
+    ======================== -->
+    <div id="view-pipeline" class="view-section">
+        <div class="px-6 pt-2 pb-4">
+            <h2 class="text-2xl font-bold text-[#1a237e]">Booking Complete</h2>
+        </div>
+        <!-- Tabs -->
+        <div class="px-6 mb-6">
+            <div class="bg-white p-1 rounded-full shadow-sm flex border border-gray-100">
+                <button onclick="switchTab(this, 'pipeline')" class="tab-btn flex-1 py-2 rounded-full text-sm font-medium text-gray-600 transition-all">Pipeline</button>
+                <button onclick="switchTab(this, 'complete')" class="tab-btn active flex-1 py-2 rounded-full text-sm font-medium bg-[#1a237e] text-white transition-all">Complete</button>
+            </div>
+        </div>
+        
+        <div class="px-4 space-y-4">
+            <!-- Expandable Card -->
+            <div class="bg-[#1a237e] text-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300" onclick="toggleCard(this)">
+                <div class="p-5 flex justify-between items-start cursor-pointer">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#1a237e]">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Test User 1</h3>
+                            <p class="text-xs text-blue-200 mt-1">Date : 22 / Mar / 2025</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-2">
+                        <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-gray-500/50 uppercase">PENDING</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 mt-2 transition-transform duration-300"></i>
+                    </div>
+                </div>
+                <!-- Content -->
+                <div class="accordion-content px-5 pb-5">
+                    <div class="flex border-b border-blue-800 mb-4 pb-2 gap-8">
+                        <div class="border-b-2 border-white pb-2 px-2"><i data-lucide="file-text" class="w-6 h-6 mx-auto"></i></div>
+                        <div class="text-blue-400 pb-2 px-2"><i data-lucide="briefcase" class="w-6 h-6 mx-auto"></i></div>
+                        <div class="text-blue-400 pb-2 px-2"><i data-lucide="user" class="w-6 h-6 mx-auto"></i></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-y-4 gap-x-2 text-sm">
+                        <div><p class="text-blue-300 text-xs mb-1">Project Name</p><p class="font-semibold">The Regent</p></div>
+                        <div><p class="text-blue-300 text-xs mb-1">Unit Number</p><p class="font-semibold">1307</p></div>
+                        <div class="col-span-2"><p class="text-blue-300 text-xs mb-1">Owner Name</p><p class="font-semibold">Jimmy</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: INCENTIVES
+    ======================== -->
+    <div id="view-incentives" class="view-section">
+        <div class="px-6 pt-2 pb-4"><h2 class="text-2xl font-bold text-[#1a237e]">My Incentives</h2></div>
+        
+        <div class="px-6 mb-6">
+            <div class="bg-white p-1 rounded-full shadow-sm flex border border-gray-100">
+                <button class="flex-1 py-2 rounded-full text-sm font-medium bg-[#1a237e] text-white">Incentives</button>
+                <button class="flex-1 py-2 rounded-full text-sm font-medium text-gray-600">Invoices</button>
+            </div>
+        </div>
+
+        <div class="px-4">
+            <div class="bg-[#1a237e] text-white rounded-2xl p-5 relative shadow-xl">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#1a237e]">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Dee CP</h3>
+                            <p class="text-xs text-blue-200 mt-1">22 / Mar / 2025</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-gray-500/50 uppercase">PENDING</span>
+                </div>
+                <div class="grid grid-cols-2 gap-y-4 text-sm mb-6">
+                    <div><p class="text-blue-300 text-xs">Brokerage Value</p><p class="font-semibold">₹1,13,75,703</p></div>
+                    <div><p class="text-blue-300 text-xs">Incentive</p><p class="font-semibold">₹2,27,524</p></div>
+                </div>
+                <button class="w-full bg-white text-[#1a237e] py-3 rounded-xl font-bold text-sm hover:bg-gray-100">Claim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: MARKETING KIT
+    ======================== -->
+    <div id="view-marketing" class="view-section bg-white">
+        <div class="px-6 py-4">
+            <h2 class="text-2xl font-bold text-[#1a237e] mb-6">Marketing Kit</h2>
+            <div class="space-y-4 mb-6">
+                <div class="relative">
+                    <select class="w-full p-3 pr-10 rounded-xl border border-gray-200 text-sm appearance-none bg-white">
+                        <option>Project 1</option>
+                        <option>The Regent</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-3 top-3.5 w-4 h-4 text-gray-400"></i>
+                </div>
+            </div>
+            
+            <div class="bg-gray-100 rounded-xl overflow-hidden mb-6 shadow-sm border border-gray-200">
+               <div class="h-32 bg-gray-300 relative">
+                   <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover">
+               </div>
+               <div class="p-3 flex justify-between items-center bg-white">
+                   <span class="text-xs font-bold text-gray-700">Brochure</span>
+                   <i data-lucide="download" class="w-4 h-4 text-[#1a237e]"></i>
+               </div>
+            </div>
+        </div>
+
+        <div class="bg-[#1f2125] px-6 py-4 rounded-t-3xl shadow-negative">
+             <div class="flex justify-between items-center text-gray-400 text-sm font-medium">
+                <div class="flex flex-col items-center gap-1 cursor-pointer hover:text-white">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5"></i><span>Offers</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 cursor-pointer hover:text-white">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i><span>Videos</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 cursor-pointer text-orange-500">
+                    <i data-lucide="image" class="w-5 h-5"></i><span>Images</span>
+                </div>
+             </div>
+        </div>
+
+        <div class="px-6 py-6 bg-gray-50 min-h-[300px] grid grid-cols-2 gap-3">
+            <div class="h-32 rounded-xl bg-gray-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2532&auto=format&fit=crop" class="w-full h-full object-cover"></div>
+            <div class="h-32 rounded-xl bg-gray-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=2532&auto=format&fit=crop" class="w-full h-full object-cover"></div>
+            <div class="h-32 rounded-xl bg-gray-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2600&auto=format&fit=crop" class="w-full h-full object-cover"></div>
+            <div class="h-32 rounded-xl bg-gray-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover"></div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: PROFILE MENU
+    ======================== -->
+    <div id="view-profile-menu" class="view-section bg-white">
+        <div class="flex-1 px-6 pt-4 pb-24 overflow-y-auto">
+            <div class="flex flex-col items-center mb-8">
+               <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg flex items-center justify-center bg-white text-3xl font-bold text-[#1a237e] relative mb-3">
+                  AR
+                  <div class="absolute bottom-0 right-0 bg-[#1a237e] p-2 rounded-full border-4 border-white">
+                     <i data-lucide="settings" class="w-3 h-3 text-white"></i>
+                  </div>
+               </div>
+               <h2 class="text-xl font-bold text-[#1a237e] flex items-center gap-2">
+                 Alexa Rawles
+               </h2>
+               <p class="text-sm text-gray-500">+91 942312121312</p>
+            </div>
+    
+            <div class="space-y-1">
+                <button onclick="navigateTo('view-profile-edit', {title: 'Business Info'})" class="w-full bg-white p-4 rounded-xl flex items-center justify-between shadow-sm border border-gray-100 mb-3 hover:bg-gray-50">
+                   <div class="flex items-center gap-3"><i data-lucide="briefcase" class="w-5 h-5 text-[#1a237e]"></i><span class="text-sm font-medium text-gray-700">Business Information</span></div>
+                   <i data-lucide="arrow-right" class="w-4 h-4 text-[#1a237e]"></i>
+                </button>
+                <button onclick="navigateTo('view-reach-us')" class="w-full bg-white p-4 rounded-xl flex items-center justify-between shadow-sm border border-gray-100 mb-3 hover:bg-gray-50">
+                    <div class="flex items-center gap-3"><i data-lucide="help-circle" class="w-5 h-5 text-[#1a237e]"></i><span class="text-sm font-medium text-gray-700">Reach Us</span></div>
+                    <i data-lucide="arrow-right" class="w-4 h-4 text-[#1a237e]"></i>
+                 </button>
+                 <button onclick="navigateTo('view-landing')" class="w-full bg-white p-4 rounded-xl flex items-center justify-between shadow-sm border border-gray-100 mt-6 text-red-500 hover:bg-red-50">
+                    <div class="flex items-center gap-3"><i data-lucide="log-out" class="w-5 h-5"></i><span class="text-sm font-medium">Logout</span></div>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: PROFILE EDIT WIZARD
+    ======================== -->
+    <div id="view-profile-edit" class="view-section bg-white">
+        <div class="flex-1 px-6 pt-4 space-y-4">
+             <input placeholder="Nature of Business/Services" class="w-full p-4 rounded-xl border border-gray-300 text-sm">
+             <input placeholder="GSTN" class="w-full p-4 rounded-xl border border-gray-300 text-sm">
+             <input placeholder="PAN Number" class="w-full p-4 rounded-xl border border-gray-300 text-sm">
+        </div>
+        <div class="p-6 bg-white border-t border-gray-100 mt-auto">
+            <button onclick="alert('Updated!'); goBack()" class="w-full py-4 rounded-full bg-[#1a237e] text-white font-semibold text-lg shadow-lg">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- ========================
+         VIEW: REACH US
+    ======================== -->
+    <div id="view-reach-us" class="view-section">
+        <div class="flex-1 px-6 pt-4 pb-24 overflow-y-auto">
+            <!-- Tabs -->
+            <div class="flex bg-white rounded-full p-1 shadow-sm mb-6 w-max">
+               <button class="px-6 py-2 bg-[#1a237e] text-white rounded-full text-xs font-bold shadow-md">All</button>
+               <button class="px-6 py-2 text-gray-500 rounded-full text-xs font-medium hover:bg-gray-50">Pending</button>
+            </div>
+    
+            <!-- Ticket Card -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 relative mb-6">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <p class="text-[10px] text-gray-400 mb-1">Case No: 000001994</p>
+                        <div class="flex gap-2">
+                           <div class="w-1 bg-[#1a237e] rounded-full"></div>
+                           <div>
+                              <h4 class="font-bold text-gray-800 text-sm">Demand Letter</h4>
+                              <p class="text-[10px] text-gray-400">Subject</p>
+                           </div>
+                        </div>
+                    </div>
+                    <span class="bg-red-50 text-red-500 text-[10px] font-bold px-2 py-1 rounded">● Open</span>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <h3 class="text-xl font-bold text-[#1a237e] mb-4">Log a Service Request</h3>
+            <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+               <div class="mb-4">
+                  <input type="text" placeholder="Subject" class="w-full p-3.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#1a237e]">
+               </div>
+               <div class="mb-6">
+                  <textarea placeholder="Description" class="w-full p-3.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#1a237e] min-h-[100px]"></textarea>
+               </div>
+               <button class="w-full py-3.5 rounded-xl bg-[#1a237e] text-white font-bold text-sm shadow-lg">Submit</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ========================
+         BOTTOM NAVIGATION
+    ======================== -->
+    <div id="bottom-nav" class="hidden fixed bottom-6 left-6 right-6 h-16 bg-[#1f2125] rounded-full flex items-center justify-around px-2 shadow-2xl z-50">
+       <button onclick="navigateTo('view-leads')" class="nav-btn p-3 rounded-full text-gray-400 hover:text-white transition-all" data-target="view-leads">
+            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+       </button>
+       <button onclick="navigateTo('view-pipeline')" class="nav-btn p-3 rounded-full text-gray-400 hover:text-white transition-all" data-target="view-pipeline">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+       </button>
+       <button onclick="navigateTo('view-dashboard')" class="nav-btn p-3 rounded-full bg-orange-500 text-white shadow-lg shadow-orange-500/30 transition-all" data-target="view-dashboard">
+            <i data-lucide="home" class="w-5 h-5"></i>
+       </button>
+       <button onclick="navigateTo('view-incentives')" class="nav-btn p-3 rounded-full text-gray-400 hover:text-white transition-all" data-target="view-incentives">
+            <i data-lucide="receipt" class="w-5 h-5"></i>
+       </button>
+       <button onclick="navigateTo('view-marketing')" class="nav-btn p-3 rounded-full text-gray-400 hover:text-white transition-all" data-target="view-marketing">
+            <i data-lucide="image" class="w-5 h-5"></i>
+       </button>
+    </div>
+
+    <!-- ========================
+         JAVASCRIPT LOGIC
+    ======================== -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // State Management
+        let historyStack = ['view-landing'];
+        let currentViewId = 'view-landing';
+
+        function loginUser() {
+            navigateTo('view-dashboard');
+        }
+
+        function navigateTo(viewId, params = {}) {
+            // Push to history if it's not a back action
+            if (currentViewId !== viewId) {
+                historyStack.push(viewId);
+                currentViewId = viewId;
+            }
+
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            
+            // Show target view
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.add('active');
+
+            // Handle Header Logic
+            const header = document.getElementById('app-header');
+            const headerTitle = document.getElementById('header-title');
+            const headerBack = document.getElementById('header-back-btn');
+            const headerBrand = document.getElementById('header-brand');
+            const headerActionsDefault = document.getElementById('header-actions-default');
+
+            if (['view-landing', 'view-login', 'view-enroll'].includes(viewId)) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+                
+                // Configure Header based on View
+                if (['view-submit-lead', 'view-profile-menu', 'view-profile-edit', 'view-reach-us'].includes(viewId)) {
+                    // Sub-pages with back button and specific titles
+                    headerBack.classList.remove('hidden');
+                    headerBrand.classList.add('hidden');
+                    headerTitle.classList.remove('hidden');
+                    headerActionsDefault.classList.add('hidden'); // Hide default actions on forms
+
+                    // Set Title
+                    if (viewId === 'view-submit-lead') headerTitle.innerText = 'Submit a Lead';
+                    if (viewId === 'view-profile-menu') headerTitle.innerText = 'Profile';
+                    if (viewId === 'view-profile-edit') headerTitle.innerText = params.title || 'Edit Profile';
+                    if (viewId === 'view-reach-us') {
+                         headerTitle.innerText = 'Reach Us';
+                         headerActionsDefault.classList.remove('hidden'); // Maybe show actions or custom button
+                    }
+
+                } else {
+                    // Main Dashboard pages
+                    headerBack.classList.add('hidden');
+                    headerBrand.classList.remove('hidden');
+                    headerTitle.classList.add('hidden');
+                    headerActionsDefault.classList.remove('hidden');
+                }
+            }
+
+            // Handle Bottom Nav Visibility
+            const bottomNav = document.getElementById('bottom-nav');
+            if (['view-landing', 'view-login', 'view-enroll'].includes(viewId)) {
+                bottomNav.classList.add('hidden');
+            } else {
+                bottomNav.classList.remove('hidden');
+                updateBottomNavActiveState(viewId);
+            }
+
+            // Refresh icons for new DOM elements
+            lucide.createIcons();
+            window.scrollTo(0,0);
+        }
+
+        function goBack() {
+            if (historyStack.length > 1) {
+                historyStack.pop(); // Remove current
+                const previous = historyStack[historyStack.length - 1];
+                currentViewId = previous; // Reset current tracker
+                
+                // Manually trigger navigation logic without pushing to stack again
+                // For simplicity in this demo, we'll re-use navigateTo but we need to handle history logic carefully.
+                // A simpler approach for this demo:
+                
+                // Hide all
+                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                
+                // Show Prev
+                const targetView = document.getElementById(previous);
+                targetView.classList.add('active');
+                
+                // Re-run header/nav logic (Copy-pasting logic or refactoring navigateTo is cleaner)
+                // For this single file, calling navigateTo logic again:
+                
+                // Hack: Remove the previous from stack because navigateTo will re-add it
+                historyStack.pop(); 
+                navigateTo(previous);
+            }
+        }
+
+        function updateBottomNavActiveState(viewId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn p-3 rounded-full text-gray-400 hover:text-white transition-all"; // Reset
+                if (btn.dataset.target === viewId) {
+                    btn.className = "nav-btn p-3 rounded-full bg-orange-500 text-white shadow-lg shadow-orange-500/30 transition-all"; // Active
+                }
+            });
+        }
+
+        // Toggles
+        function toggleCard(cardElement) {
+            const content = cardElement.querySelector('.accordion-content');
+            const arrow = cardElement.querySelector('[data-lucide="chevron-down"]');
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                arrow.style.transform = 'rotate(0deg)';
+                cardElement.classList.remove('pb-4');
+            } else {
+                content.classList.add('open');
+                arrow.style.transform = 'rotate(180deg)';
+                cardElement.classList.add('pb-4');
+            }
+        }
+
+        function toggleSiteVisit() {
+            const checkbox = document.getElementById('sv-checkbox');
+            const details = document.getElementById('sv-details');
+            const isChecked = checkbox.classList.contains('bg-[#1a237e]');
+
+            if (isChecked) {
+                checkbox.className = "w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center";
+                checkbox.innerHTML = "";
+                details.classList.add('hidden');
+            } else {
+                checkbox.className = "w-5 h-5 rounded-full border-2 border-[#1a237e] flex items-center justify-center bg-[#1a237e]";
+                checkbox.innerHTML = '<div class="w-2.5 h-2.5 rounded-full bg-white"></div>';
+                details.classList.remove('hidden');
+            }
+        }
+
+        function switchTab(btn, tabName) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.tab-btn').forEach(b => {
+                b.className = "tab-btn flex-1 py-2 rounded-full text-sm font-medium text-gray-600 transition-all";
+            });
+            btn.className = "tab-btn active flex-1 py-2 rounded-full text-sm font-medium bg-[#1a237e] text-white transition-all";
+            // Logic to filter content would go here
+        }
+    </script>
+</body>
+</html>
