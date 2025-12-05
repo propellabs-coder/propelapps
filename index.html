@@ -19,15 +19,21 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
             -webkit-tap-highlight-color: transparent;
+            overflow-y: auto;
         }
 
-        /* Hide Scrollbar but keep functionality */
+        /* Custom Scrollbar for better appearance */
         .no-scrollbar::-webkit-scrollbar {
-            display: none;
+            width: 8px;
+            background: #e5e7eb;
+        }
+        .no-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
         }
         .no-scrollbar {
             -ms-overflow-style: none;
-            scrollbar-width: none;
+            scrollbar-width: thin;
         }
 
         /* View Transitions */
@@ -37,6 +43,8 @@
             min-height: 100vh;
             padding-bottom: 80px; /* Space for bottom nav */
             background-color: #f9fafb;
+            overflow-y: auto;
+            scrollbar-width: thin;
         }
 
         .view-section.active {
@@ -48,7 +56,7 @@
         .fullscreen-view {
             padding-bottom: 0;
             height: 100vh;
-            overflow: hidden;
+            overflow-y: auto;
             background-color: #111827;
         }
 
@@ -79,7 +87,7 @@
         }
     </style>
 </head>
-<body class="mx-auto max-w-md bg-white shadow-2xl relative min-h-screen overflow-hidden text-gray-800">
+<body class="mx-auto max-w-md bg-white shadow-2xl relative min-h-screen overflow-y-auto text-gray-800 no-scrollbar">
 
     <!-- ========================
          VIEW: LANDING PAGE
